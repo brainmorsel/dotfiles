@@ -1,0 +1,30 @@
+source $HOME/.config/profile
+
+# skype pulseaudio fix
+export PULSE_LATENCY_MSEC=60
+
+# java fix
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+# http://askubuntu.com/questions/227515/terminal-warning-when-opening-a-file-in-gedit
+export NO_AT_BRIDGE=1
+
+source $HOME/.local/bin/kbdconfig.sh
+
+# Переворачиваем планшет, чтобы провод выходи справа и не мешался у клавиатуры
+xsetwacom --set "Wacom Bamboo Pen Pen stylus" Rotate half
+
+# disable screen blanking
+#xset -dpms; xset s off
+
+xrdb $HOME/.config/Xresources
+
+#xrandr --output LVDS1 --auto --output HDMI1 --right-of LVDS1 --auto
+#xrandr --output LVDS1 --brightness 0.8
+#xrandr --output LVDS --auto --output HDMI-0 --right-of LVDS --auto
+compton --vsync opengl-swc --backend glx --glx-no-stencil --glx-no-rebind-pixmap --paint-on-overlay -f -I 0.08 -O 0.08 -c -l 0 -t 0 &
+#compton -b
+#feh --bg-fill ${HOME}/.config/awesome/theme/background.png
+
+syndaemon -t -k -i 2 -d &
+
