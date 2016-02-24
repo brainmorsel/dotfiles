@@ -2,8 +2,7 @@
 # Local machine stuff
 # ---
 export PATH="$HOME/.local/bin/_overlay:$PATH:$HOME/.local/bin"
-export PAGER="vimpager"
-export EDITOR=vim
+export EDITOR=nvim
 export TERM=xterm-256color
 export INPUTRC="$HOME/.config/inputrc"
 export STARDICT_DATA_DIR="$HOME/.local/share/dic"
