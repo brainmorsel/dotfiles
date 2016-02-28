@@ -1,0 +1,31 @@
+alias ssctl='sudo systemctl'
+
+# enable color support of ls and also add handy aliases
+alias ls='ls --color=auto --group-directories-first'
+alias la='ls -A'
+alias l='ls -CF'
+alias ll='ls -lF --time-style=+%Y/%m/%d'
+alias lla='ll -a'
+alias lll='ll -a --color=force | less --raw'
+
+# fast clear screen
+alias c='echo -en "\ec"'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+alias sd=sdcv
+
+alias supac="sudo pacman"
+alias gvimt="gvim --remote-tab"
+
+if [ -f /usr/bin/grc ]; then
+  alias grca="grc --colour=auto"
+
+  for c in ping traceroute make diff last uptime vmstat iostat df mount uname ps route lsmod whereis ; do
+    alias ${c}="grca ${c}"
+  done
+  
+  alias ll="grca ls --color=force -lF --time-style=+%Y/%m/%d  --group-directories-first"
+fi

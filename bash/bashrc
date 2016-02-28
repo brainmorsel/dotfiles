@@ -1,0 +1,211 @@
+#
+# ~/.bashrc
+#
+
+source $HOME/.config/profile
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+### ============================================================================
+###  BASE SHELL CONFIGURATION
+### ============================================================================
+
+eval `dircolors $HOME/.config/dircolors-solarized.256dark`
+
+# SSH Keys Agent
+# https://github.com/vodik/envoy
+envoy --agent=ssh-agent --defer
+source <(envoy -p)
+
+# http://uggedal.com/journal/lazy-ssh-add/
+_ssh_add() {
+    [ "$SSH_CONNECTION" ] && return
+
+    local key=$HOME/.ssh/id_rsa
+
+    ssh-add -l >/dev/null || ssh-add $key
+}
+
+ssh() {
+    _ssh_add
+    command ssh "$@"
+}
+
+scp() {
+    _ssh_add
+    command scp "$@"
+}
+
+git() {
+    case $1 in
+        push|pull|fetch)
+            _ssh_add
+            ;;
+    esac
+
+    command git "$@"
+}
+
+command -v npm >/dev/null 2>&1 && . <(npm completion)
+
+source $(dirname `readlink -f $HOME/.bashrc`)/cd_fuzzy_path_finder.sh
+#source $(dirname `readlink -f $HOME/.bashrc`)/fancy_prompt.sh
+source $(dirname `readlink -f $HOME/.bashrc`)/promptline.sh
+
+source /usr/share/git/completion/git-completion.bash
+source /usr/share/git/completion/git-prompt.sh
+GIT_PS1_SHOWDIRTYSTATE="yes"
+
+source /usr/bin/virtualenvwrapper.sh
+
+# don't put duplicate lines in the history. See bash(1) for more options
+# ... or force ignoredups and ignorespace
+HISTCONTROL=ignoredups:ignorespace
+
+HISTIGNORE=":l[sal]:ll[la]:[bf]g:exit"
+HISTTIMEFORMAT="%d/%m/%y %T "
+HISTFILE=~/.cache/bash_history
+
+# set tabsize to 4
+#tabs -4
+
+shopt -s autocd
+shopt -s cdspell
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# multi-line commands are stored in the history as a single command
+shopt -s cmdhist
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+check_cursor_pos ()
+{
+    # http://habrahabr.ru/company/mailru/blog/145008/
+    # get cursor position and add new line if we're not in first column
+    #exec < /dev/tty
+    #local OLDSTTY=$(stty -g)
+    #stty raw -echo min 0
+    #echo -en "\033[6n" > /dev/tty && read -sdR CURPOS
+    #stty $OLDSTTY
+    #[[ ${CURPOS##*;} -gt 1 ]] && echo -e "\e[0;31m↵\e[0m"
+    echo -en "\033[6n" && read -sdR CURPOS
+    [[ ${CURPOS##*;} -gt 1 ]] && echo -e "\e[0;31m↵\e[0m"
+}
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+alias vim="vim -u $HOME/.local/share/vim/vimrc"
+
+alias ssctl='sudo systemctl'
+
+# enable color support of ls and also add handy aliases
+alias ls='ls --color=auto --group-directories-first'
+alias la='ls -A'
+alias l='ls -CF'
+alias ll='ls -lF --time-style=+%Y/%m/%d'
+alias lla='ll -a'
+alias lll='ll -a --color=force | less --raw'
+
+# fast clear screen
+alias c='echo -en "\ec"'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+alias sd="HOME=$HOME/.cache sdcv"
+
+#alias supac="sudo pacman"
+alias gvimt="gvim --remote-tab"
+
+if [ -f /usr/bin/grc ]; then
+  alias grca="grc --colour=auto"
+
+  for c in ping traceroute make diff last uptime vmstat iostat df mount uname ps route lsmod whereis ; do
+    alias ${c}="grca ${c}"
+  done
+  
+  alias ll="grca ls --color=force -lF --time-style=+%Y/%m/%d  --group-directories-first"
+fi
+
+# Red STDERR
+# rse <command string>
+rse ()
+{
+	{ "$@" 2>&1>&3|sed 's,.*,\x1B[31m&\x1B[0m,'>&2; } 3>&1
+}
+complete -cf rse
+
+r ()
+{
+	RED="\e[1;31;40m"
+	RST="\e[0m"
+	echo -en "${RED}remove ${#@} items${RST}: $@\n\nY/n? "
+	while read -r -n1 char
+	do
+		if [ "$char" == "Y" ] ; then
+			echo
+			/bin/rm -r "$@"
+			echo done
+			break
+		elif [ "$char" == "y" ] ; then
+			echo -en '\r(type "Y" not "y") Y/n? '
+		else
+			echo
+			echo cancel
+			break
+		fi
+	done
+}
+
+catWithSep() { sep="$1"; shift; first=''; for f; do test -n "$first" && echo "$sep"; cat "$f"; first=no; done; }
+
+..() { cd $(seq 1 $(( ${#1} + 1 )) | sed 's/.*/../' | tr '\n' '/'); }
+
+
+### ============================================================================
+###  VIM SERVER MODE HELPER
+### ============================================================================
+vim_server_name=auto
+vim_server_mode() {
+	vim --serverlist | grep -qi "$vim_server_name"
+	# If there is already a vimserver, use it
+	if [ $? -eq 0 ]; then
+		vim --servername "$vim_server_name" --remote "$@"
+	else
+		vim --servername "$vim_server_name" "$@"
+	fi
+}
+
+if command -v vim >/dev/null 2>&1 && (vim --version | grep -q +clientserver) ; then
+	alias vs=vim_server_mode
+fi
+
+
+killmenu() {
+	if [[ "$1" =~ -[0-9]+ ]] ; then
+		killsig=$1
+		shift
+	fi
+	IFS=$'\n'
+	printf "   %s\n" "$(ps -ef | head -n1)"
+	list=(`ps -ef | grep "$@"`)
+	select line in "${list[@]}" ; do
+		if [ $(echo "$line" | awk '{print $1}') != $(whoami) ] ; then
+			sudo=sudo
+		fi
+		$sudo kill $killsig $(echo "$line" | awk '{print $2}')
+		break
+	done
+}
