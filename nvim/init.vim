@@ -21,9 +21,11 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'edkolev/tmuxline.vim'
 Plug 'edkolev/promptline.vim'
 Plug 'tpope/vim-obsession'
-" CSS
-Plug 'ap/vim-css-color'
+" Rust
+Plug 'rust-lang/rust.vim'
 call plug#end()
+
+let g:rustfmt_autosave = 1
 
 let g:deoplete#enable_at_startup = 1
 " Unite
