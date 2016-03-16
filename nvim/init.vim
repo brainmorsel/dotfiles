@@ -25,7 +25,7 @@ Plug 'tpope/vim-obsession'
 Plug 'rust-lang/rust.vim'
 call plug#end()
 
-let g:rustfmt_autosave = 1
+let g:rustfmt_autosave = 0
 
 let g:deoplete#enable_at_startup = 1
 " Unite
@@ -116,6 +116,7 @@ au BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl
 au! BufWritePost $MYVIMRC source $MYVIMRC
 
 
+set spelllang=ru_yo,en
 syntax on
 filetype plugin indent on
 colorscheme solarized
