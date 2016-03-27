@@ -5,8 +5,8 @@ export PATH="$HOME/.local/bin/_overlay:$PATH:$HOME/.local/bin"
 export EDITOR=nvim
 export TERM=xterm-256color
 export INPUTRC="$HOME/.config/inputrc"
-export STARDICT_DATA_DIR="$HOME/.local/share/dic"
-export SDCV_PAGER="grcat $HOME/.grc/conf.sdcv | less -RFX"
+export STARDICT_DATA_DIR="$HOME/Sync/dic"
+export SDCV_PAGER="grcat $HOME/.config/grc/conf.sdcv | less -RFX"
 
 # RC
 export GTK_RC_FILES="$HOME/.config/gtk/gtkrc"

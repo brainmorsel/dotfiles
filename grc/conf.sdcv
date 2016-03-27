@@ -1,0 +1,8 @@
+regexp=^-->.+$
+colours=bold yellow
+========
+regexp=^[0-9]+(\.|\)) .+$
+colours=bold
+========
+regexp=(\[)[^][]+(\])
+colours=dark white,bold,bold
