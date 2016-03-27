@@ -96,9 +96,12 @@ let g:airline_section_b='%{ObsessionStatus("[%s]")}'
 " Filetypes
 "-------------------------
 autocmd! BufWritePost * Neomake
-au BufNewFile,BufRead *.jinja set filetype=jinja
+au BufRead,BufNewFile *.jinja set filetype=jinja
 au BufRead,BufNewFile *.w3af set filetype=w3af
 au BufRead,BufNewFile *.json set filetype=javascript
+au BufRead,BufNewFile *.md,*.txt set filetype=pandoc
+au BufRead,BufNewFile *.{html,htm,vue*} set filetype=html
+au BufRead,BufNewFile *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl
 
 au BufNewFile,BufReadPost *.coffee,*.jade setl shiftwidth=2 expandtab foldmethod=indent nofoldenable softtabstop=2 tabstop=2
 "au BufWritePost *.coffee silent CoffeeMake! -b | cwindow | redraw!
@@ -110,9 +113,6 @@ au BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,final
 " Trim trailing whitespace:
 au BufWritePre *.py normal m`:%s/\s\+$//e ``
 
-au BufNewFile,BufRead *.{html,htm,vue*} set filetype=html
-
-au BufNewFile,BufRead *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl
 au! BufWritePost $MYVIMRC source $MYVIMRC
 
 
