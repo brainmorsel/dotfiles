@@ -16,7 +16,7 @@ eval `dircolors $HOME/.config/dircolors-solarized.256dark`
 # SSH Keys Agent
 # https://github.com/vodik/envoy
 envoy --agent=ssh-agent --defer
-source <(envoy -p)
+source <(envoy -p --defer)
 
 # http://uggedal.com/journal/lazy-ssh-add/
 _ssh_add() {
@@ -49,15 +49,17 @@ git() {
 
 command -v npm >/dev/null 2>&1 && . <(npm completion)
 
-source $(dirname `readlink -f $HOME/.bashrc`)/cd_fuzzy_path_finder.sh
-#source $(dirname `readlink -f $HOME/.bashrc`)/fancy_prompt.sh
-source $(dirname `readlink -f $HOME/.bashrc`)/promptline.sh
+bash_rc_dir=$(dirname `readlink -f $HOME/.bashrc`)
+[[ -f ${bash_rc_dir}/cd_fuzzy_path_finder.sh ]] && . ${bash_rc_dir}/cd_fuzzy_path_finder.sh
+[[ -f ${bash_rc_dir}/promptline.sh ]] && . ${bash_rc_dir}/promptline.sh
+#[[ -f ${bash_rc_dir}/fancy_prompt.sh ]] && . ${bash_rc_dir}/fancy_prompt.sh
+[[ -f ${bash_rc_dir}/bash_aliases ]] && . ${bash_rc_dir}/bash_aliases
 
-source /usr/share/git/completion/git-completion.bash
-source /usr/share/git/completion/git-prompt.sh
+[[ -f /usr/share/git/completion/git-completion.bash ]] && . /usr/share/git/completion/git-completion.bash
+[[ -f /usr/share/git/completion/git-prompt.sh ]] && . /usr/share/git/completion/git-prompt.sh
 GIT_PS1_SHOWDIRTYSTATE="yes"
 
-source /usr/bin/virtualenvwrapper.sh
+[[ -f /usr/bin/virtualenvwrapper.sh ]] && . /usr/bin/virtualenvwrapper.sh
 
 # don't put duplicate lines in the history. See bash(1) for more options
 # ... or force ignoredups and ignorespace
@@ -101,44 +103,6 @@ check_cursor_pos ()
     [[ ${CURPOS##*;} -gt 1 ]] && echo -e "\e[0;31m↵\e[0m"
 }
 
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-alias vim="vim -u $HOME/.local/share/vim/vimrc"
-
-alias ssctl='sudo systemctl'
-
-# enable color support of ls and also add handy aliases
-alias ls='ls --color=auto --group-directories-first'
-alias la='ls -A'
-alias l='ls -CF'
-alias ll='ls -lF --time-style=+%Y/%m/%d'
-alias lla='ll -a'
-alias lll='ll -a --color=force | less --raw'
-
-# fast clear screen
-alias c='echo -en "\ec"'
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-alias sd="HOME=$HOME/.cache sdcv"
-
-#alias supac="sudo pacman"
-alias gvimt="gvim --remote-tab"
-
-if [ -f /usr/bin/grc ]; then
-  alias grca="grc --colour=auto"
-
-  for c in ping traceroute make diff last uptime vmstat iostat df mount uname ps route lsmod whereis ; do
-    alias ${c}="grca ${c}"
-  done
-  
-  alias ll="grca ls --color=force -lF --time-style=+%Y/%m/%d  --group-directories-first"
-fi
-
 # Red STDERR
 # rse <command string>
 rse ()
@@ -172,26 +136,6 @@ r ()
 catWithSep() { sep="$1"; shift; first=''; for f; do test -n "$first" && echo "$sep"; cat "$f"; first=no; done; }
 
 ..() { cd $(seq 1 $(( ${#1} + 1 )) | sed 's/.*/../' | tr '\n' '/'); }
-
-
-### ============================================================================
-###  VIM SERVER MODE HELPER
-### ============================================================================
-vim_server_name=auto
-vim_server_mode() {
-	vim --serverlist | grep -qi "$vim_server_name"
-	# If there is already a vimserver, use it
-	if [ $? -eq 0 ]; then
-		vim --servername "$vim_server_name" --remote "$@"
-	else
-		vim --servername "$vim_server_name" "$@"
-	fi
-}
-
-if command -v vim >/dev/null 2>&1 && (vim --version | grep -q +clientserver) ; then
-	alias vs=vim_server_mode
-fi
-
 
 killmenu() {
 	if [[ "$1" =~ -[0-9]+ ]] ; then
