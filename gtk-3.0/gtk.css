@@ -1,0 +1,6 @@
+/* Убирает черный бордюр у GTK3 приложений.
+ * https://unix.stackexchange.com/a/168924 */
+.window-frame {
+      box-shadow: none;
+      margin: 0;
+}
