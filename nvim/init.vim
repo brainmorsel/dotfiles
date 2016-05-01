@@ -23,6 +23,8 @@ Plug 'edkolev/promptline.vim'
 Plug 'tpope/vim-obsession'
 " Rust
 Plug 'rust-lang/rust.vim'
+"
+Plug 'keith/tmux.vim'
 call plug#end()
 
 let g:rustfmt_autosave = 0
