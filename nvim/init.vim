@@ -13,6 +13,8 @@ Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': [ 'pandoc', 'markdown' ] }
 Plug 'benekastah/neomake'
 Plug 'Shougo/deoplete.nvim'
 Plug 'Shougo/unite.vim'
+Plug 'Shougo/neoyank.vim'
+Plug 'Shougo/unite-outline'
 Plug 'Raimondi/delimitMate'
 Plug 'altercation/vim-colors-solarized'
 Plug 'ervandew/supertab'
@@ -23,24 +25,25 @@ Plug 'edkolev/promptline.vim'
 Plug 'tpope/vim-obsession'
 " Rust
 Plug 'rust-lang/rust.vim'
+" Python
+Plug 'tweekmonster/braceless.vim'
 "
 Plug 'keith/tmux.vim'
+" Pony lang
+Plug 'dleonard0/pony-vim-syntax'
 call plug#end()
 
 let g:rustfmt_autosave = 0
-
 let g:deoplete#enable_at_startup = 1
+let g:netrw_liststyle=1
 " Unite
-let g:unite_source_history_yank_enable = 1
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 "nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
 nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
 nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
-nnoremap <leader>o :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
-"nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
+nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
 nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
-nnoremap <F5> :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
-inoremap <F5> <C-o>:<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
+nnoremap <leader>o :<C-u>Unite -no-split -buffer-name=outline outline<cr>
 " Custom mappings for the unite buffer
 autocmd FileType unite call s:unite_settings()
 function! s:unite_settings()
@@ -114,6 +117,7 @@ au BufNewFile,BufReadPost *.py setl foldmethod=indent nofoldenable tabstop=4 exp
 au BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 " Trim trailing whitespace:
 au BufWritePre *.py normal m`:%s/\s\+$//e ``
+autocmd FileType python BracelessEnable +indent +highlight-cc2
 
 au! BufWritePost $MYVIMRC source $MYVIMRC
 
