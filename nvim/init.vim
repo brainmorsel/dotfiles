@@ -31,6 +31,8 @@ Plug 'tweekmonster/braceless.vim'
 Plug 'keith/tmux.vim'
 " Pony lang
 Plug 'dleonard0/pony-vim-syntax'
+" TaskPaper
+Plug 'davidoc/taskpaper.vim'
 call plug#end()
 
 let g:rustfmt_autosave = 0
