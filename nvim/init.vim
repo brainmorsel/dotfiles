@@ -27,7 +27,9 @@ Plug 'tpope/vim-obsession'
 Plug 'rust-lang/rust.vim'
 " Python
 Plug 'tweekmonster/braceless.vim'
-"
+" JavaScript
+Plug 'othree/yajs.vim'
+
 Plug 'keith/tmux.vim'
 " Pony lang
 Plug 'dleonard0/pony-vim-syntax'
