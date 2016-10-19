@@ -30,6 +30,8 @@ Plug 'tweekmonster/braceless.vim'
 " JavaScript
 Plug 'othree/yajs.vim'
 
+Plug 'lepture/vim-jinja'
+
 Plug 'keith/tmux.vim'
 " Pony lang
 Plug 'dleonard0/pony-vim-syntax'
