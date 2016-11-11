@@ -112,7 +112,11 @@ wb_taglist_buttons = awful.util.table.join(
                      awful.button({ }, 4, function(t) awful.tag.viewnext(awful.tag.getscreen(t)) end),
                      awful.button({ }, 5, function(t) awful.tag.viewprev(awful.tag.getscreen(t)) end)
                      )
+-- first screen
 wb_taglist = awful.widget.taglist(1, awful.widget.taglist.filter.all, wb_taglist_buttons)
+if dualscreen_mode then
+    wb_taglist_second = awful.widget.taglist(2, awful.widget.taglist.filter.all, {})
+end
 
 wb_tasklist = {}
 wb_tasklist.buttons = awful.util.table.join(
@@ -166,8 +170,10 @@ right_layout:add(widgets.kbdlayout())
 --right_layout:add(widgets.battery())
 right_layout:add(wb_taglist)
 right_layout:add(awful.widget.layoutbox(1))
---if dualscreen_mode then right_layout:add(awful.widget.layoutbox(2)) end
-
+if dualscreen_mode then
+    right_layout:add(wb_taglist_second)
+    right_layout:add(awful.widget.layoutbox(2))
+end
 
 -- Now bring it all together (with the tasklist in the middle)
 local layout = wibox.layout.align.horizontal()
