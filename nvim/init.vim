@@ -6,6 +6,7 @@ let mapleader="\<SPACE>"
 "-------------------------
 " https://github.com/junegunn/vim-plug
 call plug#begin()
+Plug 'Shougo/neomru.vim'
 " Pandoc / Markdown
 Plug 'vim-pandoc/vim-pandoc', { 'for': [ 'pandoc', 'markdown' ] }
 Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': [ 'pandoc', 'markdown' ] }
