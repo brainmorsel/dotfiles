@@ -33,6 +33,8 @@ Plug 'keith/tmux.vim'
 Plug 'dleonard0/pony-vim-syntax'
 " TaskPaper
 Plug 'davidoc/taskpaper.vim'
+" Go Lang
+Plug 'fatih/vim-go'
 call plug#end()
 
 let g:rustfmt_autosave = 0
