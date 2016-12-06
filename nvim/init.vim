@@ -6,6 +6,7 @@ let mapleader="\<SPACE>"
 "-------------------------
 " https://github.com/junegunn/vim-plug
 call plug#begin()
+Plug 'Shougo/neomru.vim'
 " Pandoc / Markdown
 Plug 'vim-pandoc/vim-pandoc', { 'for': [ 'pandoc', 'markdown' ] }
 Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': [ 'pandoc', 'markdown' ] }
@@ -27,7 +28,11 @@ Plug 'tpope/vim-obsession'
 Plug 'rust-lang/rust.vim'
 " Python
 Plug 'tweekmonster/braceless.vim'
-"
+" JavaScript
+Plug 'othree/yajs.vim'
+
+Plug 'lepture/vim-jinja'
+
 Plug 'keith/tmux.vim'
 " Pony lang
 Plug 'dleonard0/pony-vim-syntax'
