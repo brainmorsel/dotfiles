@@ -7,6 +7,7 @@ let mapleader="\<SPACE>"
 " https://github.com/junegunn/vim-plug
 call plug#begin()
 Plug 'Shougo/neomru.vim'
+Plug 'majutsushi/tagbar'
 " Pandoc / Markdown
 Plug 'vim-pandoc/vim-pandoc', { 'for': [ 'pandoc', 'markdown' ] }
 Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': [ 'pandoc', 'markdown' ] }
@@ -62,6 +63,8 @@ function! s:unite_settings()
   imap <buffer> <C-j>   <Plug>(unite_select_next_line)
   imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
 endfunction
+
+nmap <F8> :TagbarToggle<CR>
 " Airline
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
