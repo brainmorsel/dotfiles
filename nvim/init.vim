@@ -41,7 +41,11 @@ Plug 'dleonard0/pony-vim-syntax'
 Plug 'davidoc/taskpaper.vim'
 " Go Lang
 Plug 'fatih/vim-go'
+" VimWiki
+Plug 'vimwiki/vimwiki'
 call plug#end()
+
+let g:vimwiki_list = [{'path': '~/Sync/my_wiki/', 'path_html': '~/Sync/my_wiki_html/'}]
 
 let g:rustfmt_autosave = 0
 let g:deoplete#enable_at_startup = 1
