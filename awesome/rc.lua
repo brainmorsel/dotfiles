@@ -63,7 +63,6 @@ local modkey       = "Mod4"
 local altkey       = "Mod1"
 local terminal     = "urxvt"
 local editor       = os.getenv("EDITOR")
-local gui_editor   = "gvim"
 local browser      = "firefox"
 
 awful.util.terminal = terminal
@@ -71,16 +70,6 @@ awful.util.tagnames = { "1", "2", "3", "4", "5" }
 awful.layout.layouts = {
     awful.layout.suit.max,
     awful.layout.suit.tile,
-    --awful.layout.suit.fair,
-    --awful.layout.suit.fair.horizontal,
-    --awful.layout.suit.spiral,
-    --awful.layout.suit.spiral.dwindle,
-    --awful.layout.suit.max.fullscreen,
-    --awful.layout.suit.magnifier,
-    --awful.layout.suit.corner.nw,
-    --awful.layout.suit.corner.ne,
-    --awful.layout.suit.corner.sw,
-    --awful.layout.suit.corner.se,
 }
 awful.util.taglist_buttons = awful.util.table.join(
                     awful.button({ }, 1, function(t) t:view_only() end),
@@ -298,9 +287,6 @@ globalkeys = awful.util.table.join(
               end,
               {description = "restore minimized", group = "client"}),
 
-    -- Dropdown application
-    awful.key({ modkey, }, "z", function () awful.screen.focused().quake:toggle() end),
-
     -- Widgets popups
     --awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end),
     --awful.key({ altkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end),
@@ -311,8 +297,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "v", function () awful.spawn("xsel -b | xsel") end),
 
     -- User programs
-    awful.key({ modkey }, "e", function () awful.spawn(gui_editor) end),
-    awful.key({ modkey }, "q", function () awful.spawn(browser) end),
+    awful.key({ modkey }, "w", function () awful.spawn(browser) end),
 
     awful.key({ modkey }, "Return", function () awful.screen.focused().mypromptbox:run() end,
               {description = "run prompt", group = "launcher"}),
@@ -443,8 +428,8 @@ awful.rules.rules = {
       properties = { titlebars_enabled = true } },
 
     -- Set Firefox to always map on the first tag on screen 1.
-    { rule = { class = "Firefox" },
-      properties = { screen = 1, tag = screen[1].tags[1] } },
+    --[[{ rule = { class = "Firefox" },
+      properties = { screen = 1, tag = screen[1].tags[1] } },]]
 
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true } },
