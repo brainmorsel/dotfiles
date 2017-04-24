@@ -70,6 +70,10 @@ awful.util.tagnames = { "1", "2", "3", "4", "5" }
 awful.layout.layouts = {
     awful.layout.suit.max,
     awful.layout.suit.tile,
+    awful.layout.suit.tile.left,
+    awful.layout.suit.tile.bottom,
+    awful.layout.suit.tile.top,
+    awful.layout.suit.floating,
 }
 awful.util.taglist_buttons = awful.util.table.join(
                     awful.button({ }, 1, function(t) t:view_only() end),
@@ -297,7 +301,10 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey }, "v", function () awful.spawn("xsel -b | xsel") end),
 
     -- User programs
-    awful.key({ modkey }, "w", function () awful.spawn(browser) end),
+    awful.key({ modkey }, "r", function () run_or_raise("urxvt -name ranger -e ranger", { instance = "ranger" }) end),
+    awful.key({ modkey }, "e", function () run_or_raise("urxvt -name tmuxmain -e tmux-start.sh main", { instance = "tmuxmain" }) end),
+    awful.key({ modkey }, "d", function () run_or_raise("urxvt -name tmuxdev -e tmux-start.sh dev", { instance = "tmuxdev" }) end),
+    awful.key({ modkey }, "w", function () run_or_raise("firefox", { class = "Firefox" }) end),
 
     awful.key({ modkey }, "Return", function () awful.screen.focused().mypromptbox:run() end,
               {description = "run prompt", group = "launcher"}),
@@ -520,3 +527,15 @@ client.connect_signal("focus",
     end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
+
+function run_or_raise(cmd, properties)
+    local matcher = function (c)
+        return awful.rules.match(c, properties)
+    end
+    awful.client.run_or_raise(cmd, matcher)
+end
+
+
+run_once("unclutter -root")
+awful.spawn("start-pulseaudio-x11")
+awful.spawn("nm-applet")
