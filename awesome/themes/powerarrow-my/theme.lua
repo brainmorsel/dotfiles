@@ -101,6 +101,8 @@ theme.titlebar_maximized_button_focus_active    = theme.dir .. "/icons/titlebar/
 theme.titlebar_maximized_button_normal_active   = theme.dir .. "/icons/titlebar/maximized_normal_active.png"
 theme.titlebar_maximized_button_focus_inactive  = theme.dir .. "/icons/titlebar/maximized_focus_inactive.png"
 theme.titlebar_maximized_button_normal_inactive = theme.dir .. "/icons/titlebar/maximized_normal_inactive.png"
+theme.prompt_bg = theme.bg_focus
+theme.prompt_bg_cursor = C.base02
 
 local markup = lain.util.markup
 local separators = lain.util.separators
@@ -254,6 +256,11 @@ theme.tasklist_shape = function (cr, width, height)
     return gears.shape.partially_rounded_rect(cr, width, height, true, true, false, false, theme.wibar_height / 4)
 end
 
+theme.promptbox_shape = function (cr, width, height)
+    return gears.shape.rounded_rect(cr, width, height, theme.wibar_height / 4)
+end
+
+
 function theme.at_screen_connect(s)
     -- If wallpaper is a function, call it with the screen
     local wallpaper = theme.wallpaper
@@ -266,7 +273,8 @@ function theme.at_screen_connect(s)
     awful.tag(awful.util.tagnames, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
-    s.mypromptbox = awful.widget.prompt()
+    s.mypromptbox = awful.widget.prompt{prompt = " Run: "}
+    s.mypromptbox:set_shape(theme.promptbox_shape)
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     s.mylayoutbox = awful.widget.layoutbox(s)
@@ -294,7 +302,14 @@ function theme.at_screen_connect(s)
                 widget = wibox.container.margin,
                 bottom = theme.wibar_margin_bottom,
             },
-            s.mypromptbox,
+            {
+                s.mypromptbox,
+                widget = wibox.container.margin,
+                top = 1,
+                bottom = 1,
+                left = 2,
+                right = 2,
+            },
         },
         { -- Middle widget
             s.mytasklist,
