@@ -24,7 +24,7 @@ export WINEPREFIX=$HOME/.local/share/wine/
 export WINEARCH=win32
 
 # Go
-export GOPATH=$HOME/projects/go
+export GOPATH=$HOME/Sync/projects/go
 export PATH=$PATH:$GOPATH/bin
 
 export WORKON_HOME="$HOME/.cache/python-envs"
