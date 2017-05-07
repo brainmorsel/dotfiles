@@ -66,14 +66,10 @@ GIT_PS1_SHOWDIRTYSTATE="yes"
 HISTCONTROL=ignoredups:ignorespace
 
 HISTIGNORE=":l[sal]:ll[la]:[bf]g:exit"
-HISTTIMEFORMAT="%d/%m/%y %T "
+HISTTIMEFORMAT="%Y-%m-%d %T "
+HISTSIZE=-1
 HISTFILE=~/.cache/bash_history
-
-# set tabsize to 4
-#tabs -4
-
-shopt -s autocd
-shopt -s cdspell
+HISTFILESIZE=2000
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -81,9 +77,14 @@ shopt -s histappend
 # multi-line commands are stored in the history as a single command
 shopt -s cmdhist
 
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+bind 'set show-all-if-ambiguous on'
+bind 'TAB:menu-complete'
+
+# set tabsize to 4
+#tabs -4
+
+shopt -s autocd
+shopt -s cdspell
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
