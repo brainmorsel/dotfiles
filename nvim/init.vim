@@ -17,7 +17,8 @@ Plug 'Shougo/deoplete.nvim'
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/neoyank.vim'
 Plug 'Shougo/unite-outline'
-Plug 'Raimondi/delimitMate'
+" Автоматическая вставка скобочек, кавычем и т.п.
+"Plug 'Raimondi/delimitMate'
 Plug 'altercation/vim-colors-solarized'
 Plug 'ervandew/supertab'
 Plug 'vim-airline/vim-airline'
@@ -50,6 +51,18 @@ let g:vimwiki_list = [{'path': '~/Sync/my_wiki/', 'path_html': '~/Sync/my_wiki_h
 let g:rustfmt_autosave = 0
 let g:deoplete#enable_at_startup = 1
 let g:netrw_liststyle=1
+
+
+let g:neomake_python_flake8_maker = {
+        \ 'args': ['--format=default', '--ignore=E501'],
+        \ 'errorformat':
+            \ '%E%f:%l: could not compile,%-Z%p^,' .
+            \ '%A%f:%l:%c: %t%n %m,' .
+            \ '%A%f:%l: %t%n %m,' .
+            \ '%-G%.%#',
+        \ 'postprocess': function('neomake#makers#ft#python#Flake8EntryProcess')
+        \ }
+
 " Unite
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 "nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
@@ -82,7 +95,7 @@ nmap <leader>6 <Plug>AirlineSelectTab6
 nmap <leader>7 <Plug>AirlineSelectTab7
 nmap <leader>8 <Plug>AirlineSelectTab8
 nmap <leader>9 <Plug>AirlineSelectTab9
-let g:airline#extensions#tmuxline#enabled = 1
+let g:airline#extensions#tmuxline#enabled = 0
 let g:airline#extensions#tmuxline#snapshot_file = "~/.config/tmux.theme.conf"
 let g:airline#extensions#promptline#enabled = 1
 let g:airline#extensions#promptline#snapshot_file = "~/.config/bash/promptline.sh"
