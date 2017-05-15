@@ -170,7 +170,8 @@ root.buttons(awful.util.table.join(
 globalkeys = awful.util.table.join(
     -- Take a screenshot
     -- https://github.com/copycat-killer/dots/blob/master/bin/screenshot
-    awful.key({ altkey }, "p", function() os.execute("screenshot") end),
+    awful.key({ altkey }, "p", function() os.execute("screenshot --hidecursor") end,
+              {description="screenshot", group="global"}),
 
     -- Hotkeys
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
@@ -253,7 +254,8 @@ globalkeys = awful.util.table.join(
                 s.mybottomwibox.visible = not s.mybottomwibox.visible
             end
         end
-    end),
+    end,
+    {description = "show/hide wibox", group = "awesome"}),
 
     -- Standard program
     awful.key({ modkey, "Shift"   }, "Return", function () awful.spawn(terminal) end,
@@ -296,15 +298,21 @@ globalkeys = awful.util.table.join(
     --awful.key({ altkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end),
 
     -- Copy primary to clipboard (terminals to gtk)
-    awful.key({ modkey }, "c", function () awful.spawn("xsel | xsel -i -b") end),
+    awful.key({ modkey }, "c", function () awful.spawn("xsel | xsel -i -b") end,
+              {description = "Copy primary to clipboard (terminals to gtk)", group = "global"}),
     -- Copy clipboard to primary (gtk to terminals)
-    awful.key({ modkey }, "v", function () awful.spawn("xsel -b | xsel") end),
+    awful.key({ modkey }, "v", function () awful.spawn("xsel -b | xsel") end,
+              {description = "Copy clipboard to primary (gtk to terminals)", group = "global"}),
 
     -- User programs
-    awful.key({ modkey }, "r", function () run_or_raise("urxvt -name ranger -e ranger", { instance = "ranger" }) end),
-    awful.key({ modkey }, "e", function () run_or_raise("urxvt -name tmuxmain -e tmux-start.sh main", { instance = "tmuxmain" }) end),
-    awful.key({ modkey }, "d", function () run_or_raise("urxvt -name tmuxdev -e tmux-start.sh dev", { instance = "tmuxdev" }) end),
-    awful.key({ modkey }, "w", function () run_or_raise("firefox", { class = "Firefox" }) end),
+    awful.key({ modkey }, "r", function () run_or_raise("urxvt -name ranger -e ranger", { instance = "ranger" }) end,
+              {description = "ranger", group = "apps"}),
+    awful.key({ modkey }, "e", function () run_or_raise("urxvt -name tmuxmain -e tmux-start.sh main", { instance = "tmuxmain" }) end,
+              {description = "tmux main", group = "apps"}),
+    awful.key({ modkey }, "d", function () run_or_raise("urxvt -name tmuxdev -e tmux-start.sh dev", { instance = "tmuxdev" }) end,
+              {description = "tmux dev", group = "apps"}),
+    awful.key({ modkey }, "w", function () run_or_raise("firefox", { class = "Firefox" }) end,
+              {description = "firefox", group = "apps"}),
 
     awful.key({ modkey }, "Return", function () awful.screen.focused().mypromptbox:run() end,
               {description = "run prompt", group = "launcher"}),
