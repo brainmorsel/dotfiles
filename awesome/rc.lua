@@ -534,6 +534,18 @@ client.connect_signal("focus",
         end
     end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+
+-- Work around for small gap on top and left edge of screen when app in fullscreen.
+-- https://github.com/awesomeWM/awesome/issues/1607#issuecomment-298194491
+client.connect_signal("property::fullscreen", function(c)
+  if c.fullscreen then
+    gears.timer.delayed_call(function()
+      if c.valid then
+        c:geometry(c.screen.geometry)
+      end
+    end)
+  end
+end)
 -- }}}
 
 function run_or_raise(cmd, properties)
