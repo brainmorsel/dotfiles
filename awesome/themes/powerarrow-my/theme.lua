@@ -28,7 +28,7 @@ local C = {
 
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-my"
-theme.wallpaper                                 = theme.dir .. "/background_fill_1200.png"
+theme.wallpaper                                 = theme.dir .. "/wall.png"
 theme.font                                      = "Terminus (TTF) 12"
 theme.wibar_height                              = 20
 theme.wibar_margin_bottom                       = 2
@@ -290,7 +290,10 @@ function theme.at_screen_connect(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = theme.wibar_height, bg = theme.bg_normal, fg = theme.fg_normal })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = theme.wibar_height, bg = theme.bg_normal.."00", fg = theme.fg_normal })
+
+    s.systray = wibox.widget.systray()
+    s.systray.opacity = 0.1
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -324,7 +327,7 @@ function theme.at_screen_connect(s)
                     s.mylayoutbox,
                     widgets.keyboardlayout:new(),
                     {
-                        wibox.widget.systray(),
+                        s.systray,
                         clock.widget,
                         layout = wibox.layout.fixed.horizontal,
                     },
