@@ -12,8 +12,9 @@ Plug 'majutsushi/tagbar'
 Plug 'vim-pandoc/vim-pandoc', { 'for': [ 'pandoc', 'markdown' ] }
 Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': [ 'pandoc', 'markdown' ] }
 " General
+Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 Plug 'benekastah/neomake'
-Plug 'Shougo/deoplete.nvim'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/neoyank.vim'
 Plug 'Shougo/unite-outline'
@@ -32,6 +33,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'tweekmonster/braceless.vim'
 " JavaScript
 Plug 'othree/yajs.vim'
+Plug 'posva/vim-vue'
 
 Plug 'lepture/vim-jinja'
 
@@ -54,7 +56,7 @@ let g:netrw_liststyle=1
 
 
 let g:neomake_python_flake8_maker = {
-        \ 'args': ['--format=default', '--ignore=E501'],
+        \ 'args': ['--format=default', '--ignore=E501,E231,E203'],
         \ 'errorformat':
             \ '%E%f:%l: could not compile,%-Z%p^,' .
             \ '%A%f:%l:%c: %t%n %m,' .
@@ -62,6 +64,18 @@ let g:neomake_python_flake8_maker = {
             \ '%-G%.%#',
         \ 'postprocess': function('neomake#makers#ft#python#Flake8EntryProcess')
         \ }
+
+" Python: workon venv && pip install neovim && pip install python-language-server
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'python': ['pyls'],
+    \ }
+
+" Automatically start language servers.
+let g:LanguageClient_autoStart = 0
+"nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+"nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+"nnoremap <silent> <F3> :call LanguageClient_textDocument_rename()<CR>
 
 " Unite
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
@@ -134,12 +148,12 @@ au BufRead,BufNewFile *.jinja set filetype=jinja
 au BufRead,BufNewFile *.w3af set filetype=w3af
 au BufRead,BufNewFile *.json set filetype=javascript
 au BufRead,BufNewFile *.md,*.txt set filetype=pandoc
-au BufRead,BufNewFile *.{html,htm,vue*} set filetype=html
+au BufRead,BufNewFile *.{html,htm,vue*} set filetype=html 
 au BufRead,BufNewFile *.frag,*.vert,*.fp,*.vp,*.glsl setf glsl
 
 au BufNewFile,BufReadPost *.coffee,*.jade setl shiftwidth=2 expandtab foldmethod=indent nofoldenable softtabstop=2 tabstop=2
 "au BufWritePost *.coffee silent CoffeeMake! -b | cwindow | redraw!
-au BufNewFile,BufReadPost *.js,*.jsx,*.html setl shiftwidth=2 expandtab nofoldenable softtabstop=2 tabstop=2
+au BufNewFile,BufReadPost *.{js,jsx,html,htm,vue*} setl shiftwidth=2 expandtab nofoldenable softtabstop=2 tabstop=2
 
 " Python
 au BufNewFile,BufReadPost *.py setl foldmethod=indent nofoldenable tabstop=4 expandtab shiftwidth=4 softtabstop=4
@@ -195,6 +209,7 @@ set dir=/tmp
 set hidden
 " Hide the mouse when typing text
 set mousehide
+set mouse=a
 " Turn on autoindent (http://stackoverflow.com/a/10380793)
 set autoindent
 "set indentexpr=GetIndent()
