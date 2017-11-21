@@ -14,6 +14,7 @@ Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': [ 'pandoc', 'markdown' ] }
 " General
 Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 Plug 'benekastah/neomake'
+Plug 'jaawerth/nrun.vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/neoyank.vim'
@@ -54,6 +55,11 @@ let g:rustfmt_autosave = 0
 let g:deoplete#enable_at_startup = 1
 let g:netrw_liststyle=1
 
+
+" When writing a buffer, and on normal mode changes (after 750ms).
+call neomake#configure#automake('nw', 750)
+
+au BufEnter *.{js,vue} let b:neomake_javascript_eslint_exe = nrun#Which('eslint')
 
 let g:neomake_python_flake8_maker = {
         \ 'args': ['--format=default', '--ignore=E501,E231,E203'],
