@@ -65,13 +65,13 @@ font:
   bold:
     family: Terminus (TTF) # should be "Menlo" or something on macOS.
     # Style can be specified to pick a specific face.
-    # style: Bold
+    style: Bold
 
   # The italic font face
   italic:
     family: Terminus (TTF) # should be "Menlo" or something on macOS.
     # Style can be specified to pick a specific face.
-    # style: Italic
+    style: Italic
 
   # Point size of the font
   size: 15.0
@@ -162,7 +162,7 @@ visual_bell:
   duration: 0
 
 # Background opacity
-background_opacity: 1.0
+background_opacity: 0.9
 
 # Mouse bindings
 #
@@ -189,7 +189,7 @@ mouse:
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
 
-hide_cursor_when_typing: false
+hide_cursor_when_typing: true
 
 # Live config reload (changes require restart)
 live_config_reload: true
