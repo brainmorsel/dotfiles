@@ -10,6 +10,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 export NO_AT_BRIDGE=1
 
 source $HOME/.local/bin/kbdconfig.sh
+xcape -t 1000 -e "Control_L=Escape"
 
 # disable screen blanking
 xset -dpms; xset s off
@@ -19,8 +20,12 @@ xrdb $HOME/.config/Xresources
 #xrandr --output LVDS1 --auto --output HDMI1 --right-of LVDS1 --auto
 #xrandr --output LVDS1 --brightness 0.8
 #xrandr --output LVDS --auto --output HDMI-0 --right-of LVDS --auto
-compton --vsync opengl-swc --backend glx --glx-no-stencil --glx-no-rebind-pixmap --paint-on-overlay -f -I 0.08 -O 0.08 -c -l 0 -t 0 &
+compton --vsync opengl-swc --backend glx --glx-no-stencil --glx-no-rebind-pixmap --paint-on-overlay -f -I 0.08 -O 0.08 -l 0 -t 0 &
 #feh --bg-fill ${HOME}/.config/awesome/theme/background.png
 
 syndaemon -t -k -i 2 -d &
 
+synclient TapButton1=1
+synclient TapButton2=2
+synclient TapButton3=3
+synclient PalmDetect=1

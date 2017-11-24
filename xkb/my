@@ -1,0 +1,16 @@
+xkb_keymap {
+	xkb_keycodes  { include "evdev+aliases(qwerty)"	};
+	xkb_types     { include "complete"	};
+	xkb_compat    { include "complete+ledscroll(group_lock)"	};
+	xkb_symbols   {
+	    include "pc+us+ru(winkeys):2+inet(evdev)"
+	    include "group(shifts_toggle)"
+	    include "compose(ralt)"
+
+	    key <AC10> { [ colon, semicolon ] };
+	    key <TLDE> { [ asciitilde, grave ] };
+	    replace key <CAPS> { [ Control_L ] };
+	    replace key <LCTL> { [ Caps_Lock ] };
+	};
+	xkb_geometry  { include "pc(pc105)"	};
+};
