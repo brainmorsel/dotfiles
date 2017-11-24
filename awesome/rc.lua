@@ -61,7 +61,7 @@ end
 local chosen_theme = "powerarrow-my"
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "urxvt"
+local terminal     = "alacritty"
 local editor       = os.getenv("EDITOR")
 local browser      = "firefox"
 
@@ -307,9 +307,9 @@ globalkeys = awful.util.table.join(
     -- User programs
     awful.key({ modkey }, "r", function () run_or_raise("urxvt -name ranger -e ranger", { instance = "ranger" }) end,
               {description = "ranger", group = "apps"}),
-    awful.key({ modkey }, "e", function () run_or_raise("urxvt -name tmuxmain -e tmux-start.sh main", { instance = "tmuxmain" }) end,
+    awful.key({ modkey }, "e", function () run_or_raise_tmux('main') end,
               {description = "tmux main", group = "apps"}),
-    awful.key({ modkey }, "d", function () run_or_raise("urxvt -name tmuxdev -e tmux-start.sh dev", { instance = "tmuxdev" }) end,
+    awful.key({ modkey }, "d", function () run_or_raise_tmux('dev') end,
               {description = "tmux dev", group = "apps"}),
     awful.key({ modkey }, "w", function () run_or_raise("firefox", { class = "Firefox" }) end,
               {description = "firefox", group = "apps"}),
@@ -553,6 +553,12 @@ function run_or_raise(cmd, properties)
         return awful.rules.match(c, properties)
     end
     awful.client.run_or_raise(cmd, matcher)
+end
+
+function run_or_raise_tmux(session)
+    local instance = "tmux:" .. session
+    local cmd = terminal .. " -t '" .. instance .. "' -e tmux-start.sh '" .. session .."'"
+    run_or_raise(cmd, { instance = instance })
 end
 
 
