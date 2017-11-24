@@ -260,7 +260,7 @@ function keyboardlayout.new()
     self.layout_name = function(v)
         local name = v.file
         if v.section ~= nil then
-            name = name .. "(" .. v.section .. ")"
+            --name = name .. "(" .. v.section .. ")"
         end
         return name
     end
