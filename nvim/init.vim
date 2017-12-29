@@ -7,7 +7,7 @@ let mapleader="\<SPACE>"
 " https://github.com/junegunn/vim-plug
 call plug#begin()
 Plug 'Shougo/neomru.vim'
-Plug 'majutsushi/tagbar'
+"Plug 'majutsushi/tagbar'
 " Pandoc / Markdown
 Plug 'vim-pandoc/vim-pandoc', { 'for': [ 'pandoc', 'markdown' ] }
 Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': [ 'pandoc', 'markdown' ] }
@@ -25,20 +25,21 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'ervandew/supertab'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'edkolev/tmuxline.vim'
-Plug 'edkolev/promptline.vim'
+"Plug 'edkolev/tmuxline.vim'
+"Plug 'edkolev/promptline.vim'
 Plug 'tpope/vim-obsession'
 " Rust
 Plug 'rust-lang/rust.vim'
 " Python
-Plug 'tweekmonster/braceless.vim'
+"Plug 'tweekmonster/braceless.vim'
+Plug 'python-mode/python-mode', {'branch': 'develop'}
 " JavaScript
 Plug 'othree/yajs.vim'
 Plug 'posva/vim-vue'
 
 Plug 'lepture/vim-jinja'
 
-Plug 'keith/tmux.vim'
+"Plug 'keith/tmux.vim'
 " Pony lang
 Plug 'dleonard0/pony-vim-syntax'
 " TaskPaper
@@ -55,6 +56,8 @@ let g:rustfmt_autosave = 0
 let g:deoplete#enable_at_startup = 1
 let g:netrw_liststyle=1
 
+let g:pymode_python = 'python3'
+let g:pytmode_lint = 0
 
 " When writing a buffer, and on normal mode changes (after 750ms).
 call neomake#configure#automake('nw', 750)
@@ -138,12 +141,12 @@ let g:tmuxline_preset = {
       \'c'    : '#W',
       \'win'  : '#I #W #F',
       \'cwin' : '#I #W'}
-let g:promptline_preset = {
-        \'a'    : [ '$USER' ],
-        \'b'    : [ promptline#slices#cwd() ],
-        \'c'    : [ promptline#slices#vcs_branch(), promptline#slices#git_status() ],
-        \'y'    : [ promptline#slices#python_virtualenv() ],
-        \'warn' : [ promptline#slices#last_exit_code() ]}
+"let g:promptline_preset = {
+"        \'a'    : [ '$USER' ],
+"        \'b'    : [ promptline#slices#cwd() ],
+"        \'c'    : [ promptline#slices#vcs_branch(), promptline#slices#git_status() ],
+"        \'y'    : [ promptline#slices#python_virtualenv() ],
+"        \'warn' : [ promptline#slices#last_exit_code() ]}
 let g:airline_section_b='%{ObsessionStatus("[%s]")}'
 
 "-------------------------
@@ -166,7 +169,7 @@ au BufNewFile,BufReadPost *.py setl foldmethod=indent nofoldenable tabstop=4 exp
 au BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 " Trim trailing whitespace:
 au BufWritePre *.py normal m`:%s/\s\+$//e ``
-autocmd FileType python BracelessEnable +indent +highlight-cc2
+"autocmd FileType python BracelessEnable +indent +highlight-cc2
 
 au! BufWritePost $MYVIMRC source $MYVIMRC
 
