@@ -1,0 +1,47 @@
+input {
+border: 2px inset white;
+background-color: white;
+color: black;
+}
+
+textarea {
+border: 2px inset white;
+background-color: white;
+color: black;
+}
+
+select {
+border: 2px inset white;
+background-color: white;
+color: black;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+border: 2px inset white;
+background-color: white;
+color: ThreeDFace;
+}
+
+*|*::-moz-radio {
+background-color: white;
+}
+
+button,
+input[type="reset"],
+input[type="button"],
+input[type="submit"] {
+border: 2px outset white;
+background-color: #eeeeee;
+color: black;
+}
+
+html {
+background-color: white;
+color: black;
+}
+body {
+display: block;
+margin: 8px;
+-moz-appearance: none;
+}
