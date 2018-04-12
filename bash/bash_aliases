@@ -7,9 +7,18 @@ alias l='ls -CF'
 alias ll='ls -lF --time-style=+%Y/%m/%d'
 alias lla='ll -a'
 alias lll='ll -a --color=force | less --raw'
+alias llrt="ls -lrt" # list in long format, in reverse order of modification time (I find it easier to see last modified items at the end)
+
+alias ..="cd .."
+alias cd..="cd .."
+alias cd-projects="cd ~/Sync/projects"
+
+alias mkdir="mkdir -pv" # make necessary parent directory, and make it verbose to help avoid typos
 
 # fast clear screen
 alias c='echo -en "\ec"'
+
+alias ps-grep="_ps_grep"
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -20,9 +29,24 @@ alias sd="HOME=$HOME/.cache sdcv"
 if [ -f /usr/bin/grc ]; then
   alias grca="grc --colour=auto"
 
-  for c in ping traceroute make diff last uptime vmstat iostat df mount uname ps route lsmod whereis ; do
+  for c in ip ping make diff last uptime vmstat iostat mount uname ps lsmod whereis ; do
     alias ${c}="grca ${c}"
   done
   
   alias ll="grca ls --color=force -lF --time-style=+%Y/%m/%d  --group-directories-first"
+  alias df="grca df -h"
 fi
+
+function ? {
+    alias -p | sed -r -e "s/^alias ([^=]+)='(grca )?(.*)'\$/"$'\e[36m\\1\e[0m\t\e[1;34m\\3\e[0m/'
+}
+
+function _ps_grep {
+    local _ps="ps aux"
+    local _grep="grep --color=auto"
+    local _out=$($_ps)
+    {
+        $_ps | head -n1
+        echo "$_out" | $_grep "$@"
+    } | grcat conf.other
+}
