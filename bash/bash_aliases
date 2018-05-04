@@ -1,3 +1,5 @@
+export EXECIGNORE='*/cd-*'
+
 alias ssctl='sudo systemctl'
 
 # enable color support of ls and also add handy aliases

@@ -3,3 +3,97 @@
 toolbarbutton#alltabs-button {
     -moz-binding: url("userChrome.xml#js");
 }
+
+#tabbrowser-tabs {
+  visibility: collapse;
+}
+
+
+#sidebar-box[sidebarcommand="_0ad88674-2b41-4cfb-99e3-e206c74a0076_-sidebar-action"] {
+    overflow: hidden;
+    min-width: 32px;
+    max-width: 32px;
+    position: fixed;
+    top: 40px;
+    transition: all 0.2s ease;
+    border-right: 1px solid #0c0c0d;
+    z-index: 2;
+}
+
+#sidebar-box[sidebarcommand="_0ad88674-2b41-4cfb-99e3-e206c74a0076_-sidebar-action"]:hover,
+#sidebar-box[sidebarcommand="_0ad88674-2b41-4cfb-99e3-e206c74a0076_-sidebar-action"] #sidebar {
+    min-width: 260px !important;
+    max-width: 260px !important;
+}
+
+#sidebar-box[sidebarcommand="_0ad88674-2b41-4cfb-99e3-e206c74a0076_-sidebar-action"] #sidebar-header, #sidebar-box[sidebarcommand="_0ad88674-2b41-4cfb-99e3-e206c74a0076_-sidebar-action"] ~ #sidebar-splitter {
+    display: none;
+}
+
+#sidebar-box[sidebarcommand="_0ad88674-2b41-4cfb-99e3-e206c74a0076_-sidebar-action"] #sidebar-header {
+    background-color: Window;
+    border-bottom: none;
+}
+
+/*
+ * ADJUST!
+ * You need to subtract the height of the panels above sidebar: nav bar,
+ * bokmarks bar, sidebar header, etc. -- whichever you have enabled.
+ * 
+ * 36px subtracted below is the height of the nav bar with default theme.
+ * I don't have bookmarks bar enabled, and sidebar header is hidden with
+ * CSS above, so this is all I need to do.
+ */
+#sidebar-box[sidebarcommand="_0ad88674-2b41-4cfb-99e3-e206c74a0076_-sidebar-action"] #sidebar {
+    height: calc(100vh - 40px); 
+}
+
+#sidebar-box[sidebarcommand="_0ad88674-2b41-4cfb-99e3-e206c74a0076_-sidebar-action"]:not([hidden="true"]) ~ #sidebar-splitter ~ #appcontent {
+    margin-left: 32px;
+}
+
+#main-window[inFullscreen] #appcontent {
+    margin-left: 0 !important;
+}
+
+#main-window[privatebrowsingmode="temporary"] #TabsToolbar, #main-window[inFullscreen] #TabsToolbar {
+/*    background-color: #11161b;*/
+}
+#main-window[privatebrowsingmode="temporary"] #tabbrowser-tabs, #main-window[inFullscreen] #tabbrowser-tabs {
+    visibility: visible !important;
+}
+#main-window[inFullscreen][inDOMFullscreen] #tabbrowser-tabs {
+    visibility: collapse !important;
+}
+#main-window[inFullscreen] #sidebar-box[sidebarcommand="_0ad88674-2b41-4cfb-99e3-e206c74a0076_-sidebar-action"] {
+    display: none !important;
+}
+#navigator-toolbox > toolbar:not(#TabsToolbar):not(#toolbar-menubar), .browserContainer > findbar, #browser-bottombox, #toolbar-menubar {
+/*    background-color: #31363b !important;*/
+}
+#nav-bar-customization-target {
+    margin: 0px 2px;
+}
+#window-controls {
+    filter: invert(75%);
+}
+#nav-bar toolbarpaletteitem[id^="wrapper-customizableui-special-spring"], #nav-bar toolbarspring {
+    -moz-box-flex: 1 !important;
+}
+.findbar-button:hover {
+    color: #ddd !important;
+}
+.findbar-button[checked="true"]:not(:hover) {
+    color: white !important;
+}
+:root[uidensity="compact"] #nav-bar[brighttext] > #PanelUI-button {
+    border-image-source: linear-gradient(transparent 4px, rgba(100%,100%,100%,.2) 4px, rgba(100%,100%,100%,.2) calc(100% - 4px), transparent calc(100% - 4px));
+}
+:root[uidensity="compact"] #PanelUI-button {
+    margin-inline-start: 3px;
+    border-inline-start: 1px solid;
+    border-image: linear-gradient(transparent 4px, rgba(0,0,0,.1) 4px, rgba(0,0,0,.1) calc(100% - 4px), transparent calc(100% - 4px));
+    border-image-source: linear-gradient(transparent 4px, rgba(0, 0, 0, 0.1) 4px, rgba(0, 0, 0, 0.1) calc(100% - 4px), transparent calc(100% - 4px));
+    border-image-slice: 100%;
+    border-image-slice: 1;
+}
