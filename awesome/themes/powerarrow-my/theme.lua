@@ -3,7 +3,7 @@ local gears = require("gears")
 local lain  = require("lain")
 local awful = require("awful")
 local wibox = require("wibox")
-local os    = { getenv = os.getenv }
+local os    = { getenv = os.getenv, execute = os.execute }
 local widgets = require("widgets")
 
 local C = {
@@ -30,16 +30,16 @@ local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-my"
 theme.wallpaper                                 = theme.dir .. "/wall.png"
 theme.font                                      = "Terminus (TTF) 12"
-theme.wibar_height                              = 20
-theme.wibar_margin_bottom                       = 2
-theme.fg_normal                                 = C.base1
-theme.fg_focus                                  = C.base1
-theme.fg_urgent                                 = C.cyan
-theme.bg_normal                                 = C.base03
-theme.bg_focus                                  = C.base02_l
-theme.bg_urgent                                 = C.base01
-theme.border_width                              = 2
-theme.border_normal                             = theme.bg_focus
+theme.wibar_height                              = 24
+theme.wibar_margin_bottom                       = 3
+theme.fg_normal                                 = C.base01
+theme.fg_focus                                  = C.base3
+theme.fg_urgent                                 = C.base3
+theme.bg_normal                                 = C.base2
+theme.bg_focus                                  = C.yellow
+theme.bg_urgent                                 = C.red
+theme.border_width                              = 0
+theme.border_normal                             = C.base2
 theme.border_focus                              = theme.bg_focus
 theme.border_marked                             = "#CC9393"
 theme.tasklist_bg_focus                         = theme.bg_focus
@@ -101,27 +101,25 @@ theme.titlebar_maximized_button_focus_active    = theme.dir .. "/icons/titlebar/
 theme.titlebar_maximized_button_normal_active   = theme.dir .. "/icons/titlebar/maximized_normal_active.png"
 theme.titlebar_maximized_button_focus_inactive  = theme.dir .. "/icons/titlebar/maximized_focus_inactive.png"
 theme.titlebar_maximized_button_normal_inactive = theme.dir .. "/icons/titlebar/maximized_normal_inactive.png"
+theme.prompt_fg = theme.fg_focus
 theme.prompt_bg = theme.bg_focus
-theme.prompt_bg_cursor = C.base02
+theme.prompt_bg_cursor = theme.fg_focus
 
 local markup = lain.util.markup
 local separators = lain.util.separators
 
 -- Textclock
 local clockicon = wibox.widget.imagebox(theme.widget_clock)
-local clock = lain.widget.watch({
-    timeout  = 60,
-    cmd      = " date +'%a %d %b %R '",
-    settings = function()
-        widget:set_markup(" " .. markup.font(theme.font, output))
-    end
-})
+local clock = wibox.widget.textclock(markup.font(theme.font, " <b>%H:%M</b> %a %b %d "))
 
 -- Calendar
 theme.cal = lain.widget.calendar({
-    attach_to = { clock.widget },
+    attach_to = { clock },
+    icons = "",
+    cal = "/usr/bin/env TERM=linux /usr/bin/cal --color=always",
+    followtag = true,
     notification_preset = {
-        font = "xos4 Terminus 10",
+        font = theme.font,
         fg   = theme.fg_normal,
         bg   = theme.bg_normal
     }
@@ -131,7 +129,7 @@ theme.cal = lain.widget.calendar({
 local memicon = wibox.widget.imagebox(theme.widget_mem)
 local mem = lain.widget.mem({
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. mem_now.used .. "MB "))
+        widget:set_markup(markup.font(theme.font, "" .. mem_now.used .. "MB "))
     end
 })
 
@@ -139,7 +137,7 @@ local mem = lain.widget.mem({
 local cpuicon = wibox.widget.imagebox(theme.widget_cpu)
 local cpu = lain.widget.cpu({
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. cpu_now.usage .. "% "))
+        widget:set_markup(markup.font(theme.font, string.format("%2s%% ", cpu_now.usage)))
     end
 })
 
@@ -147,17 +145,21 @@ local cpu = lain.widget.cpu({
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
 local temp = lain.widget.temp({
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. coretemp_now .. "°C "))
+        widget:set_markup(markup.font(theme.font, "" .. math.floor(coretemp_now) .. "°C "))
     end
 })
 
 -- / fs
 local fsicon = wibox.widget.imagebox(theme.widget_hdd)
 theme.fs = lain.widget.fs({
-    options  = "--exclude-type=tmpfs",
-    notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = "xos4 Terminus 10" },
+    notification_preset = {
+        font = theme.font,
+        fg   = theme.fg_normal,
+        bg   = theme.bg_normal
+    },
+    followtag = true,
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. fs_now.used .. "% "))
+        widget:set_markup(markup.font(theme.font, "" .. fs_now["/"].percentage .. "% "))
     end
 })
 
@@ -177,7 +179,7 @@ local bat = lain.widget.bat({
             else
                 baticon:set_image(theme.widget_battery)
             end
-            widget:set_markup(markup.font(theme.font, " " .. bat_now.perc .. "% "))
+            widget:set_markup(markup.font(theme.font, "" .. bat_now.perc .. "% "))
         else
             widget:set_markup(markup.font(theme.font, " AC "))
             baticon:set_image(theme.widget_ac)
@@ -190,18 +192,50 @@ local neticon = wibox.widget.imagebox(theme.widget_net)
 local net = lain.widget.net({
     settings = function()
         widget:set_markup(markup.font(theme.font,
-                          markup(C.green, " " .. net_now.received)
+                          markup(C.green, "" .. net_now.received)
                           .. " " ..
-                          markup(C.cyan, " " .. net_now.sent .. " ")))
+                          markup(C.cyan, "" .. net_now.sent .. " ")))
     end
 })
+
+local volumeicon = wibox.widget.imagebox(theme.widget_vol)
+local volume = lain.widget.pulse {
+    settings = function()
+        vlevel = math.floor((volume_now.left + volume_now.right) / 2) .. "% "
+        if volume_now.muted == "yes" then
+            vlevel = " M  "
+        end
+        widget:set_markup(markup.font(theme.font, vlevel))
+    end
+}
+volume.widget:buttons(awful.util.table.join(
+    awful.button({}, 1, function() -- left click
+        awful.spawn("pavucontrol")
+    end),
+    awful.button({}, 2, function() -- middle click
+        os.execute(string.format("pactl set-sink-volume %d 100%%", volume.device))
+        volume.update()
+    end),
+    awful.button({}, 3, function() -- right click
+        os.execute(string.format("pactl set-sink-mute %d toggle", volume.device))
+        volume.update()
+    end),
+    awful.button({}, 4, function() -- scroll up
+        os.execute(string.format("pactl set-sink-volume %d +1%%", volume.device))
+        volume.update()
+    end),
+    awful.button({}, 5, function() -- scroll down
+        os.execute(string.format("pactl set-sink-volume %d -1%%", volume.device))
+        volume.update()
+    end)
+))
 
 function shape_powerline_left(cr, width, height)
     return gears.shape.powerline(cr, width, height, -height/2)
 end
 
 function container_arrow(widget, direction)
-    local margin = (theme.wibar_height - theme.wibar_margin_bottom) / 2
+    local margin = (theme.wibar_height - (theme.wibar_margin_bottom * 2)) / 2 - 4
     local direction = direction or "right"
     local shape = gears.shape.powerline
     if direction == "left" then
@@ -215,7 +249,7 @@ function container_arrow(widget, direction)
             right = margin,
         },
         widget = wibox.container.background,
-        bg = theme.bg_focus,
+        bg = C.base3,
         shape = shape,
     }
 end
@@ -243,11 +277,16 @@ end
 function with_icon(icon, widget)
     return {
         icon,
-        widget,
+        {
+            widget,
+            widget = wibox.container.margin,
+            bottom = 2,
+        },
         layout = wibox.layout.fixed.horizontal,
     }
 end
 
+--[[
 theme.taglist_shape = function (cr, width, height)
     return gears.shape.partially_rounded_rect(cr, width, height, false, false, true, true, theme.wibar_height / 4)
 end
@@ -255,9 +294,17 @@ end
 theme.tasklist_shape = function (cr, width, height)
     return gears.shape.partially_rounded_rect(cr, width, height, true, true, false, false, theme.wibar_height / 4)
 end
+]]--
 
 theme.promptbox_shape = function (cr, width, height)
     return gears.shape.rounded_rect(cr, width, height, theme.wibar_height / 4)
+end
+
+
+theme.titlebar_fun = function (c)
+    awful.titlebar(c, {size = 4}) : setup {
+        layout = wibox.layout.align.horizontal
+    }
 end
 
 
@@ -290,7 +337,7 @@ function theme.at_screen_connect(s)
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = theme.wibar_height, bg = theme.bg_normal.."00", fg = theme.fg_normal })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = theme.wibar_height, bg = theme.bg_normal.."ff", fg = theme.fg_normal })
 
     s.systray = wibox.widget.systray()
     s.systray.opacity = 0.1
@@ -304,6 +351,7 @@ function theme.at_screen_connect(s)
                 s.mytaglist,
                 widget = wibox.container.margin,
                 bottom = theme.wibar_margin_bottom,
+                left = 4,
             },
             {
                 s.mypromptbox,
@@ -317,30 +365,47 @@ function theme.at_screen_connect(s)
         { -- Middle widget
             s.mytasklist,
             widget = wibox.container.margin,
-            top = theme.wibar_margin_bottom,
+            top = 0,
         },
         { -- Right widget
+            layout = wibox.layout.fixed.horizontal,
             {
-                layout = wibox.layout.fixed.horizontal,
-                powerline_bar {
-                    direction = "left",
-                    s.mylayoutbox,
-                    widgets.keyboardlayout:new(),
-                    {
-                        s.systray,
-                        clock.widget,
-                        layout = wibox.layout.fixed.horizontal,
+                s.systray,
+                widget = wibox.container.margin,
+                top = 1,
+                left = 4,
+                right = 4,
+                bottom = 1,
+            },
+            {
+                widget = wibox.container.margin,
+                top = theme.wibar_margin_bottom,
+                bottom = theme.wibar_margin_bottom,
+                {
+                    layout = wibox.layout.fixed.horizontal,
+                    powerline_bar {
+                        direction = "left",
+                        s.mylayoutbox,
+                        {
+                            widgets.keyboardlayout:new(),
+                            widget = wibox.container.margin,
+                            bottom = 2,
+                        },
+                        {
+                            clock,
+                            widget = wibox.container.margin,
+                            bottom = 2,
+                        },
+                        with_icon(volumeicon, volume.widget),
+                        with_icon(baticon, bat.widget),
+                        with_icon(fsicon, theme.fs.widget),
+                        with_icon(tempicon, temp.widget),
+                        with_icon(cpuicon, cpu.widget),
+                        with_icon(memicon, mem.widget),
+                        with_icon(neticon, net.widget),
                     },
-                    with_icon(baticon, bat.widget),
-                    with_icon(fsicon, theme.fs.widget),
-                    with_icon(tempicon, temp.widget),
-                    with_icon(cpuicon, cpu.widget),
-                    with_icon(memicon, mem.widget),
-                    with_icon(neticon, net.widget),
                 },
             },
-            widget = wibox.container.margin,
-            bottom = theme.wibar_margin_bottom,
         },
     }
 end

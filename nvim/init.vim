@@ -25,7 +25,7 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'ervandew/supertab'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-"Plug 'edkolev/tmuxline.vim'
+Plug 'edkolev/tmuxline.vim'
 "Plug 'edkolev/promptline.vim'
 Plug 'tpope/vim-obsession'
 " Rust
@@ -118,7 +118,7 @@ nmap <leader>6 <Plug>AirlineSelectTab6
 nmap <leader>7 <Plug>AirlineSelectTab7
 nmap <leader>8 <Plug>AirlineSelectTab8
 nmap <leader>9 <Plug>AirlineSelectTab9
-let g:airline#extensions#tmuxline#enabled = 0
+let g:airline#extensions#tmuxline#enabled = 1
 let g:airline#extensions#tmuxline#snapshot_file = "~/.config/tmux.theme.conf"
 let g:airline#extensions#promptline#enabled = 1
 let g:airline#extensions#promptline#snapshot_file = "~/.config/bash/promptline.sh"
@@ -178,7 +178,7 @@ set spelllang=ru_yo,en
 syntax on
 filetype plugin indent on
 colorscheme solarized
-set background=dark
+set background=light
 set complete-=i
 set colorcolumn=80
 " for white space characters visualisation

@@ -11,7 +11,7 @@ source $HOME/.config/profile
 ###  BASE SHELL CONFIGURATION
 ### ============================================================================
 
-eval `dircolors $HOME/.config/dircolors-solarized.256dark`
+eval `dircolors $HOME/.config/dircolors-solarized.ansi-light`
 
 # SSH Keys Agent
 # https://github.com/vodik/envoy

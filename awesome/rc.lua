@@ -440,7 +440,7 @@ awful.rules.rules = {
 
     -- Titlebars
     { rule_any = { type = { "dialog", "normal" } },
-      properties = { titlebars_enabled = false } },
+      properties = { titlebars_enabled = true } },
 
     -- Set Firefox to always map on the first tag on screen 1.
     --[[{ rule = { class = "Firefox" },
@@ -558,7 +558,7 @@ end
 function run_or_raise_tmux(session)
     local instance = "tmux:" .. session
     local cmd = terminal .. " -t '" .. instance .. "' -e tmux-start.sh '" .. session .."'"
-    run_or_raise(cmd, { instance = instance })
+    run_or_raise(cmd, { name = instance })
 end
 
 
