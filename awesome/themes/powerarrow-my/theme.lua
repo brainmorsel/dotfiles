@@ -42,7 +42,15 @@ theme.border_width                              = 0
 theme.border_normal                             = C.base2
 theme.border_focus                              = theme.bg_focus
 theme.border_marked                             = "#CC9393"
-theme.tasklist_bg_focus                         = theme.bg_focus
+theme.tasklist_bg_focus                         = C.base3
+theme.tasklist_fg_focus                         = theme.bg_focus
+theme.tasklist_spacing                          = 4
+theme.tasklist_shape_border_width               = 0
+theme.tasklist_shape_border_color               = theme.bg_normal
+theme.tasklist_shape_border_width_focus         = 0
+theme.tasklist_shape_border_color_focus         = theme.bg_focus
+theme.tasklist_plain_task_name                  = true
+theme.tasklist_disable_icon                     = true
 theme.titlebar_bg_focus                         = theme.bg_focus
 theme.titlebar_bg_normal                        = theme.bg_normal
 theme.titlebar_fg_focus                         = theme.fg_focus
@@ -80,8 +88,6 @@ theme.widget_vol_no                             = theme.dir .. "/icons/vol_no.pn
 theme.widget_vol_mute                           = theme.dir .. "/icons/vol_mute.png"
 theme.widget_mail                               = theme.dir .. "/icons/mail.png"
 theme.widget_mail_on                            = theme.dir .. "/icons/mail_on.png"
-theme.tasklist_plain_task_name                  = true
-theme.tasklist_disable_icon                     = false
 theme.useless_gap                               = 0
 theme.titlebar_close_button_focus               = theme.dir .. "/icons/titlebar/close_focus.png"
 theme.titlebar_close_button_normal              = theme.dir .. "/icons/titlebar/close_normal.png"
@@ -291,14 +297,15 @@ theme.taglist_shape = function (cr, width, height)
     return gears.shape.partially_rounded_rect(cr, width, height, false, false, true, true, theme.wibar_height / 4)
 end
 
-theme.tasklist_shape = function (cr, width, height)
-    return gears.shape.partially_rounded_rect(cr, width, height, true, true, false, false, theme.wibar_height / 4)
-end
-]]--
-
 theme.promptbox_shape = function (cr, width, height)
     return gears.shape.rounded_rect(cr, width, height, theme.wibar_height / 4)
 end
+]]--
+theme.tasklist_shape = function (cr, width, height)
+    --return gears.shape.partially_rounded_rect(cr, width, height, true, true, false, false, theme.wibar_height / 4)
+    return gears.shape.rectangle(cr, width, height)
+end
+
 
 
 theme.titlebar_fun = function (c)
