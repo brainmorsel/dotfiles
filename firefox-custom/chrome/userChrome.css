@@ -16,7 +16,7 @@ toolbarbutton#alltabs-button {
     position: fixed;
     top: 40px;
     transition: all 0.2s ease;
-    border-right: 1px solid #0c0c0d;
+    border-right: 1px solid #dbcea5;
     z-index: 2;
 }
 
