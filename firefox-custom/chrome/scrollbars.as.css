@@ -1,0 +1,55 @@
+@namespace url(http: //www.mozilla.org/keymaster/gatekeeper/there.is.only.xul);
+
+:not(select):not(hbox) > scrollbar {
+  -moz-appearance: none !important;
+  position: relative;
+  background-color: rgba(0,0,0,0) !important;
+  background-image: none;
+  opacity: 0.75;
+  z-index: 2147483647;
+  padding: 2px;
+  transition: opacity 0.5s ease-in-out;
+  backface-visibility: hidden;
+}
+:not(select):not(hbox) > scrollbar:hover {
+  background-color: Window !important;
+  opacity: 1.0;
+}
+:not(select):not(hbox) > scrollbar[orient = "vertical"] {
+ -moz-margin-start: -10px;
+ min-width: 10px;
+}
+:not(select):not(hbox) > scrollbar[orient = "vertical"]:hover {
+ -moz-margin-start: -20px;
+ min-width: 20px;
+}
+:not(select):not(hbox) > scrollbar[orient = "vertical"] thumb {
+ min-height: 20px;
+}
+:not(select):not(hbox) > scrollbar[orient = "horizontal"] {
+ margin-top: -10px;
+ min-height: 10px;
+}
+:not(select):not(hbox) > scrollbar[orient = "horizontal"]:hover {
+ margin-top: -20px;
+ min-height: 20px;
+}
+:not(select):not(hbox) > scrollbar[orient = "horizontal"] thumb {
+ min-width: 20px;
+}
+:not(select):not(hbox) > scrollbar thumb {
+ -moz-appearance: none!important;
+ border-width: 0px!important;
+ border-radius: 3px!important;
+ background-color: #b58900 !important;
+ transition: background-color 0.2s ease-in-out;
+}
+:not(select):not(hbox) > scrollbar:hover thumb {
+ border-radius: 10px !important;
+}
+:not(select):not(hbox) > scrollbar thumb:active,    :not(select):not(hbox) > scrollbar thumb:hover {
+ background-color: #b58900 !important;
+}
+:not(select):not(hbox) > scrollbar scrollbarbutton, :not(select):not(hbox) > scrollbar gripper {
+ display: none;
+}
