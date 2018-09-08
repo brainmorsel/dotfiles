@@ -52,14 +52,17 @@ theme.tasklist_shape_border_width_focus         = 0
 theme.tasklist_shape_border_color_focus         = theme.bg_focus
 theme.tasklist_plain_task_name                  = true
 theme.tasklist_disable_icon                     = true
-theme.titlebar_bg_focus                         = theme.bg_focus
-theme.titlebar_bg_normal                        = theme.bg_normal
+theme.titlebar_bg_focus                         = "#00000000"
+theme.titlebar_bg_normal                        = theme.titlebar_bg_focus
 theme.titlebar_fg_focus                         = theme.fg_focus
+theme.titlebar_bar_normal                       = C.base0
+theme.titlebar_bar_focus                        = theme.bg_focus
 theme.menu_height                               = 16
 theme.menu_width                                = 140
 theme.menu_submenu_icon                         = theme.dir .. "/icons/submenu.png"
 theme.taglist_squares_sel                       = theme.dir .. "/icons/square_sel.png"
 theme.taglist_squares_unsel                     = theme.dir .. "/icons/square_unsel.png"
+theme.layout_centerwork                         = theme.dir .. "/icons/centerwork.png"
 theme.layout_tile                               = theme.dir .. "/icons/tile.png"
 theme.layout_tileleft                           = theme.dir .. "/icons/tileleft.png"
 theme.layout_tilebottom                         = theme.dir .. "/icons/tilebottom.png"
@@ -90,8 +93,12 @@ theme.widget_vol_mute                           = theme.dir .. "/icons/vol_mute.
 theme.widget_mail                               = theme.dir .. "/icons/mail.png"
 theme.widget_mail_on                            = theme.dir .. "/icons/mail_on.png"
 theme.useless_gap                               = 0
-theme.titlebar_close_button_focus               = theme.dir .. "/icons/titlebar/close_focus.png"
-theme.titlebar_close_button_normal              = theme.dir .. "/icons/titlebar/close_normal.png"
+theme.titlebar_close_button_normal              = gears.surface.load_from_shape (12, 12, gears.shape.circle, theme.titlebar_bar_normal)
+theme.titlebar_close_button_focus               = gears.surface.load_from_shape (12, 12, gears.shape.circle, C.red)
+theme.titlebar_minimize_button_normal           = theme.titlebar_close_button_normal
+theme.titlebar_minimize_button_focus            = gears.surface.load_from_shape (12, 12, gears.shape.circle, C.yellow)
+theme.titlebar_maximized_button_normal_inactive = theme.titlebar_close_button_normal
+theme.titlebar_maximized_button_focus_inactive  = gears.surface.load_from_shape (12, 12, gears.shape.circle, C.green)
 theme.titlebar_ontop_button_focus_active        = theme.dir .. "/icons/titlebar/ontop_focus_active.png"
 theme.titlebar_ontop_button_normal_active       = theme.dir .. "/icons/titlebar/ontop_normal_active.png"
 theme.titlebar_ontop_button_focus_inactive      = theme.dir .. "/icons/titlebar/ontop_focus_inactive.png"
@@ -104,10 +111,6 @@ theme.titlebar_floating_button_focus_active     = theme.dir .. "/icons/titlebar/
 theme.titlebar_floating_button_normal_active    = theme.dir .. "/icons/titlebar/floating_normal_active.png"
 theme.titlebar_floating_button_focus_inactive   = theme.dir .. "/icons/titlebar/floating_focus_inactive.png"
 theme.titlebar_floating_button_normal_inactive  = theme.dir .. "/icons/titlebar/floating_normal_inactive.png"
-theme.titlebar_maximized_button_focus_active    = theme.dir .. "/icons/titlebar/maximized_focus_active.png"
-theme.titlebar_maximized_button_normal_active   = theme.dir .. "/icons/titlebar/maximized_normal_active.png"
-theme.titlebar_maximized_button_focus_inactive  = theme.dir .. "/icons/titlebar/maximized_focus_inactive.png"
-theme.titlebar_maximized_button_normal_inactive = theme.dir .. "/icons/titlebar/maximized_normal_inactive.png"
 theme.prompt_fg = theme.fg_focus
 theme.prompt_bg = theme.bg_focus
 theme.prompt_bg_cursor = theme.fg_focus
@@ -308,12 +311,73 @@ theme.tasklist_shape = function (cr, width, height)
 end
 
 
-
-theme.titlebar_fun = function (c)
-    awful.titlebar(c, {size = 4}) : setup {
-        layout = wibox.layout.align.horizontal
+function wrap_in_margin(margin, wrapped_widget)
+    return {
+        wrapped_widget,
+        widget = wibox.container.margin,
+        top = margin,
+        bottom = margin,
+        left = margin,
+        right = margin,
     }
 end
+
+
+theme.titlebar_fun = function (c)
+    local buttons = awful.util.table.join(
+        awful.button({ }, 1, function()
+            client.focus = c
+            c:raise()
+            awful.mouse.client.move(c)
+        end),
+        awful.button({ }, 3, function()
+            client.focus = c
+            c:raise()
+            awful.mouse.client.resize(c)
+        end)
+    )
+
+    local titlebar = wibox.container.background(
+        wibox.widget.textbox(),
+        theme.titlebar_bar_normal
+    )
+    titlebar.shape = gears.shape.rounded_bar
+
+
+    local button_close = awful.widget.button()
+    button_close.forced_width = 32
+
+    awful.titlebar(c, {size = 16}) : setup {
+        { -- Left
+            {
+                widget = wibox.container.margin,
+                left = 4,
+                awful.titlebar.widget.iconwidget(c),
+            },
+            layout  = wibox.layout.fixed.horizontal
+        },
+        { -- Middle
+            buttons = buttons,
+            wrap_in_margin(4, titlebar),
+            layout  = wibox.layout.flex.horizontal
+        },
+        { -- Right
+            widget = wibox.container.margin,
+            right = 4,
+            {
+                wrap_in_margin(2, awful.titlebar.widget.maximizedbutton(c)),
+                wrap_in_margin(2, awful.titlebar.widget.minimizebutton (c)),
+                wrap_in_margin(2, awful.titlebar.widget.closebutton(c)),
+                layout = wibox.layout.fixed.horizontal()
+            },
+        },
+        layout = wibox.layout.align.horizontal
+    }
+
+    c._titlebar = titlebar
+end
+client.connect_signal("focus", function(c) c._titlebar.bg = theme.titlebar_bar_focus end)
+client.connect_signal("unfocus", function(c) c._titlebar.bg = theme.titlebar_bar_normal end)
 
 
 function theme.at_screen_connect(s)
