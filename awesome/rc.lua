@@ -20,6 +20,7 @@ local naughty       = require("naughty")
 --local freedesktop   = require("freedesktop")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 local lain  = require("lain")
+local my = require("my")
 -- }}}
 
 -- {{{ Error handling
@@ -67,14 +68,9 @@ local editor       = os.getenv("EDITOR")
 local browser      = "firefox"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "1", "2", "3", "4", "5" }
 awful.layout.layouts = {
+    my.layout.centerfair,
     awful.layout.suit.max,
-    lain.layout.centerwork,
-    awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
     awful.layout.suit.floating,
 }
 awful.util.taglist_buttons = awful.util.table.join(
@@ -133,19 +129,9 @@ local theme_path = string.format("%s/.config/awesome/themes/%s/theme.lua", os.ge
 beautiful.init(theme_path)
 -- }}}
 
--- {{{ Menu
-local myawesomemenu = {
-    { "hotkeys", function() return false, hotkeys_popup.show_help end },
-    { "manual", terminal .. " -e man awesome" },
-    { "edit config", string.format("%s -e %s %s", terminal, editor, awesome.conffile) },
-    { "restart", awesome.restart },
-    { "quit", function() awesome.quit() end }
-}
--- }}}
 
 -- {{{ Screen
--- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
-screen.connect_signal("property::geometry", function(s)
+local function set_wallpaper(s)
     -- Wallpaper
     if beautiful.wallpaper then
         local wallpaper = beautiful.wallpaper
@@ -155,9 +141,28 @@ screen.connect_signal("property::geometry", function(s)
         end
         gears.wallpaper.maximized(wallpaper, s, true)
     end
+end
+
+-- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
+screen.connect_signal("property::geometry", set_wallpaper)
+
+awful.screen.connect_for_each_screen(function(s)
+    -- Wallpaper
+    set_wallpaper(s)
+
+    -- Each screen has its own tag table.
+    for _, name in ipairs({"1", "2", "3", "4", "5"}) do
+        awful.tag.add(name, {
+            layout = awful.layout.layouts[1],
+            screen = s,
+            selected = (name == "1"),
+            master_width_factor = 1280 / s.workarea.width,
+        })
+    end
+
+    -- Create a wibox for each screen and add it
+    beautiful.at_screen_connect(s)
 end)
--- Create a wibox for each screen and add it
-awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s) end)
 -- }}}
 
 -- {{{ Mouse bindings

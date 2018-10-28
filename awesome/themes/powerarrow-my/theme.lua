@@ -62,6 +62,7 @@ theme.menu_width                                = 140
 theme.menu_submenu_icon                         = theme.dir .. "/icons/submenu.png"
 theme.taglist_squares_sel                       = theme.dir .. "/icons/square_sel.png"
 theme.taglist_squares_unsel                     = theme.dir .. "/icons/square_unsel.png"
+theme.layout_centerfair                         = theme.dir .. "/icons/centerfair.png"
 theme.layout_centerwork                         = theme.dir .. "/icons/centerwork.png"
 theme.layout_tile                               = theme.dir .. "/icons/tile.png"
 theme.layout_tileleft                           = theme.dir .. "/icons/tileleft.png"
@@ -381,16 +382,6 @@ client.connect_signal("unfocus", function(c) c._titlebar.bg = theme.titlebar_bar
 
 
 function theme.at_screen_connect(s)
-    -- If wallpaper is a function, call it with the screen
-    local wallpaper = theme.wallpaper
-    if type(wallpaper) == "function" then
-        wallpaper = wallpaper(s)
-    end
-    gears.wallpaper.maximized(wallpaper, s, true)
-
-    -- Tags
-    awful.tag(awful.util.tagnames, s, awful.layout.layouts[1])
-
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt{prompt = " Run: "}
     s.mypromptbox:set_shape(theme.promptbox_shape)
