@@ -1,5 +1,7 @@
 source $HOME/.config/profile
 
+[ "$XDG_CURRENT_DESKTOP" = "KDE" ] || [ "$XDG_CURRENT_DESKTOP" = "GNOME" ] || export QT_QPA_PLATFORMTHEME="qt5ct"
+
 # skype pulseaudio fix
 export PULSE_LATENCY_MSEC=60
 
