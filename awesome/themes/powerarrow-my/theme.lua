@@ -378,8 +378,14 @@ theme.titlebar_fun = function (c)
 
     c._titlebar = titlebar
 end
-client.connect_signal("focus", function(c) c._titlebar.bg = theme.titlebar_bar_focus end)
-client.connect_signal("unfocus", function(c) c._titlebar.bg = theme.titlebar_bar_normal end)
+client.connect_signal("focus", function(c)
+    if c._titlebar == nil then return end
+    c._titlebar.bg = theme.titlebar_bar_focus
+end)
+client.connect_signal("unfocus", function(c)
+    if c._titlebar == nil then return end
+    c._titlebar.bg = theme.titlebar_bar_normal
+end)
 
 
 function theme.at_screen_connect(s)
