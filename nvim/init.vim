@@ -25,8 +25,6 @@ Plug 'altercation/vim-colors-solarized'
 Plug 'ervandew/supertab'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'edkolev/tmuxline.vim'
-"Plug 'edkolev/promptline.vim'
 Plug 'tpope/vim-obsession'
 " Rust
 Plug 'rust-lang/rust.vim'
