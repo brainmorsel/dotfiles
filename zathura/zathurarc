@@ -1,0 +1,14 @@
+set recolor-darkcolor "#073642"
+set recolor-lightcolor "#fdf6e3"
+set recolor true
+
+set default-bg "#fdf6e3"
+set statusbar-fg "#073642"
+set statusbar-bg "#eee8d5"
+set show-scrollbars true
+set selection-clipboard clipboard
+set statusbar-basename true
+
+set adjust-open width
+
+map i recolor
