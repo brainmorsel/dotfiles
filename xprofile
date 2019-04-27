@@ -11,22 +11,20 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # http://askubuntu.com/questions/227515/terminal-warning-when-opening-a-file-in-gedit
 export NO_AT_BRIDGE=1
 
+xrdb $HOME/.config/Xresources
+
 source $HOME/.local/bin/kbdconfig.sh
 xcape -t 1000 -e "Control_L=Escape"
 
 # disable screen blanking
 xset -dpms; xset s off
 
-xrdb $HOME/.config/Xresources
-
 #xrandr --output LVDS1 --auto --output HDMI1 --right-of LVDS1 --auto
 #xrandr --output LVDS1 --brightness 0.8
 #xrandr --output LVDS --auto --output HDMI-0 --right-of LVDS --auto
-compton --vsync opengl-swc --backend glx --glx-no-stencil --glx-no-rebind-pixmap --paint-on-overlay -f -I 0.08 -O 0.08 -l 0 -t 0 &
-#feh --bg-fill ${HOME}/.config/awesome/theme/background.png
+compton &
 
 syndaemon -t -k -i 2 -d &
-
 synclient TapButton1=1
 synclient TapButton2=2
 synclient TapButton3=3
@@ -34,8 +32,6 @@ synclient PalmDetect=1
 
 # ignore positive oom_score_adj, no memory report, notify with notify-send
 earlyoom -i -r 0 -n &
-
 unclutter --fork
-
 nm-applet &
 start-pulseaudio-x11
