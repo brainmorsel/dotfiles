@@ -176,7 +176,6 @@ root.buttons(awful.util.table.join(
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
     -- Take a screenshot
-    -- https://github.com/copycat-killer/dots/blob/master/bin/screenshot
     awful.key({ altkey }, "p", function() os.execute("screenshot --hidecursor") end,
               {description="screenshot", group="global"}),
 
@@ -312,6 +311,8 @@ globalkeys = awful.util.table.join(
               {description = "Copy clipboard to primary (gtk to terminals)", group = "global"}),
 
     -- User programs
+    awful.key({ modkey }, "z", function () awful.spawn("dm-tool lock") end,
+              {description = "Lock X session", group = "global"}),
     awful.key({ modkey }, "r", function () run_or_raise("urxvt -name ranger -e ranger", { instance = "ranger" }) end,
               {description = "ranger", group = "apps"}),
     awful.key({ modkey }, "e", function () run_or_raise_tmux('main') end,
@@ -567,8 +568,3 @@ function run_or_raise_tmux(session)
     local cmd = terminal .. " -t '" .. instance .. "' -e tmux-start.sh '" .. session .."'"
     run_or_raise(cmd, { name = instance })
 end
-
-
-run_once("unclutter -root")
-awful.spawn("start-pulseaudio-x11")
-awful.spawn("nm-applet")
