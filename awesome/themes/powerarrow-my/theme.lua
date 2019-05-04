@@ -94,7 +94,7 @@ theme.widget_vol_no                             = theme.dir .. "/icons/vol_no.pn
 theme.widget_vol_mute                           = theme.dir .. "/icons/vol_mute.png"
 theme.widget_mail                               = theme.dir .. "/icons/mail.png"
 theme.widget_mail_on                            = theme.dir .. "/icons/mail_on.png"
-theme.useless_gap                               = 0
+theme.useless_gap                               = 1
 theme.titlebar_close_button_normal              = gears.surface.load_from_shape (12, 12, gears.shape.circle, theme.titlebar_bar_normal)
 theme.titlebar_close_button_focus               = gears.surface.load_from_shape (12, 12, gears.shape.circle, C.red)
 theme.titlebar_minimize_button_normal           = theme.titlebar_close_button_normal
@@ -313,19 +313,20 @@ theme.tasklist_shape = function (cr, width, height)
 end
 
 
-function wrap_in_margin(margin, wrapped_widget)
+function wrap_in_margin(wrapped_widget, left, right, top, bottom)
     return {
         wrapped_widget,
         widget = wibox.container.margin,
-        top = margin,
-        bottom = margin,
-        left = margin,
-        right = margin,
+        top = top,
+        bottom = bottom,
+        left = left,
+        right = right,
     }
 end
 
 
 theme.titlebar_fun = function (c)
+    gears.surface.apply_shape_bounding(c, gears.shape.partially_rounded_rect, true, true, false, false, 4)
     local buttons = awful.util.table.join(
         awful.button({ }, 1, function()
             client.focus = c
@@ -349,27 +350,23 @@ theme.titlebar_fun = function (c)
     local button_close = awful.widget.button()
     button_close.forced_width = 32
 
-    awful.titlebar(c, {size = 16}) : setup {
+    awful.titlebar(c, {size = 17}) : setup {
         { -- Left
-            {
-                widget = wibox.container.margin,
-                left = 4,
-                awful.titlebar.widget.iconwidget(c),
-            },
+            wrap_in_margin(awful.titlebar.widget.iconwidget(c), 1, 2),
             layout  = wibox.layout.fixed.horizontal
         },
         { -- Middle
             buttons = buttons,
-            wrap_in_margin(4, titlebar),
+            wrap_in_margin(titlebar, 0, 4, 4, 5),
             layout  = wibox.layout.flex.horizontal
         },
         { -- Right
             widget = wibox.container.margin,
             right = 4,
             {
-                wrap_in_margin(2, awful.titlebar.widget.maximizedbutton(c)),
-                wrap_in_margin(2, awful.titlebar.widget.minimizebutton (c)),
-                wrap_in_margin(2, awful.titlebar.widget.closebutton(c)),
+                wrap_in_margin(awful.titlebar.widget.maximizedbutton(c), 2, 2, 2, 3),
+                wrap_in_margin(awful.titlebar.widget.minimizebutton (c), 2, 2, 2, 3),
+                wrap_in_margin(awful.titlebar.widget.closebutton(c), 2, 0, 2, 3),
                 layout = wibox.layout.fixed.horizontal()
             },
         },
@@ -385,6 +382,13 @@ end)
 client.connect_signal("unfocus", function(c)
     if c._titlebar == nil then return end
     c._titlebar.bg = theme.titlebar_bar_normal
+end)
+client.connect_signal("property::geometry", function (c)
+    if not c.fullscreen then
+        gears.timer.delayed_call(function()
+            gears.surface.apply_shape_bounding(c, gears.shape.partially_rounded_rect, true, true, false, false, 8)
+        end)
+    end
 end)
 
 
@@ -410,7 +414,14 @@ function theme.at_screen_connect(s)
         s, awful.widget.tasklist.filter.currenttags, awful.util.tasklist_buttons, {}, nil, tasklist_layout)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = theme.wibar_height, bg = theme.bg_normal.."ff", fg = theme.fg_normal })
+    s.mywibox = awful.wibar({
+        position = "top",
+        screen = s,
+        height = theme.wibar_height,
+        bg = theme.bg_normal.."ff",
+        fg = theme.fg_normal,
+    })
+    --s.mywibox:struts({ top = theme.wibar_height + 4 })
 
     s.systray = wibox.widget.systray()
     s.systray.opacity = 0.1
