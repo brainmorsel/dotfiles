@@ -63,7 +63,7 @@ end
 local chosen_theme = "powerarrow-my"
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "alacritty"
+local terminal     = "kitty"
 local editor       = os.getenv("EDITOR")
 local browser      = "firefox"
 
@@ -565,6 +565,6 @@ end
 
 function run_or_raise_tmux(session)
     local instance = "tmux:" .. session
-    local cmd = terminal .. " -t '" .. instance .. "' -e tmux-start.sh '" .. session .."'"
-    run_or_raise(cmd, { name = instance })
+    local cmd = terminal .. " --name='" .. instance .. "' tmux-start.sh '" .. session .."'"
+    run_or_raise(cmd, { instance = instance })
 end
