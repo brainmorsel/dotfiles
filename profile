@@ -3,7 +3,7 @@
 # ---
 export PATH="$HOME/.local/bin/_overlay:$PATH:$HOME/.local/bin"
 export EDITOR=nvim
-export TERM=xterm-256color
+#export TERM=xterm-256color
 #export INPUTRC="$HOME/.config/inputrc"
 export STARDICT_DATA_DIR="$HOME/Sync/dic"
 export SDCV_PAGER="grcat $HOME/.config/grc/conf.sdcv | less -RFX"
